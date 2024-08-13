@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "523833171591",
+    "project_id": "mpstorageaplication",
+    "storage_bucket": "mpstorageaplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523833171591:android:52beca0b7a257effd9e222",
+        "android_client_info": {
+          "package_name": "com.example.mpstorage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4zqVkPN1vsJ9GYrIpbFpQD95cXOS5u-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
