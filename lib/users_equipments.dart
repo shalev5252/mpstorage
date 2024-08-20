@@ -193,7 +193,7 @@ class _UserEquipmentPageState extends State<UserEquipmentPage> {
                           Text('שם: ${items[index].loanerName}',
                               textAlign: TextAlign.center),
                           SizedBox(height: 5),
-                          Text('מספר אישי: ${items[index].loanerId}'),
+                          Text('תעודת זהות: ${items[index].loanerId}'),
                           SizedBox(height: 5),
                           Text('טלפון: ${items[index].phone}'),
                         ],

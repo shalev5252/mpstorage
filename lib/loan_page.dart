@@ -272,7 +272,7 @@ class _LoanPageState extends State<LoanPage> {
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                hintText: 'מספר אישי'),
+                                hintText: 'תעודת זהות'),
                             style: inputTextStyleUserdata,
 
                           )),
