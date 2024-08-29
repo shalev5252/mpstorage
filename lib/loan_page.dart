@@ -183,7 +183,7 @@ class _LoanPageState extends State<LoanPage> {
                           requestFocusOnTap: true,
                           menuHeight: 300,
                           width: MediaQuery.sizeOf(context).width * 0.7,
-                          label: Text('החייל החותם', style: userMenuTextStyle),
+                          label: Text('שם החותם', style: userMenuTextStyle),
                           textStyle: userMenuTextStyle,
                           dropdownMenuEntries: [
                             ..._loaners.map((loaner) {
@@ -379,7 +379,7 @@ class _LoanPageState extends State<LoanPage> {
                       requestFocusOnTap: true,
                       menuHeight: 300,
                       width: MediaQuery.sizeOf(context).width * 0.5,
-                      label: Text("חייל הימח", style: userMenuTextStyle),
+                      label: Text("מנפק הציוד", style: userMenuTextStyle),
                       textStyle: userMenuTextStyle,
                       dropdownMenuEntries: _logisticNames.map((String value) {
                         return DropdownMenuEntry(

@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: _buildNavigationButton(context, 'החתמת/זיכוי ציוד', goToLoanPage)),
               const SizedBox(height: 53),
               Hero(tag: 'loan tables', child:
-              _buildNavigationButton(context, 'חתימות חיילים', goToShowPage)),
+              _buildNavigationButton(context, 'חתימות', goToShowPage)),
               const SizedBox(height: 53),
               Hero(tag: 'equipment state', child:
               _buildNavigationButton(context, 'מציבת ציוד', goToEquipSumPage)),

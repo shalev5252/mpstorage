@@ -107,7 +107,7 @@ class _UserEquipmentPageState extends State<UserEquipmentPage> {
         backgroundColor: buttonsAppbarColors,
         title: Hero(
             tag: "loan tables",
-            child: Center(child: Text('חתימות חיילים', style: labelTextStyle))),
+            child: Center(child: Text('חתימות', style: labelTextStyle))),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: textColorStyle),
           onPressed: () => Navigator.of(context).pop(),
@@ -186,7 +186,7 @@ class _UserEquipmentPageState extends State<UserEquipmentPage> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                      title: const Text('פרטי החייל'),
+                      title: const Text('פרטי החותם'),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
