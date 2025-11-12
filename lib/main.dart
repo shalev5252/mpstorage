@@ -9,29 +9,35 @@ import 'equipment_summary_page.dart';
 import 'firebase_options.dart';
 import 'loan_page.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   try {
-    if (kIsWeb) {
-      await Firebase.initializeApp(
-        options: FirebaseOptions(
+    // ✅ Check if Firebase was already initialized
+    if (Firebase.apps.isEmpty) {
+      if (kIsWeb) {
+        await Firebase.initializeApp(
+          options: const FirebaseOptions(
             apiKey: "AIzaSyBY4MekHfjETMr3LFeYDip2BqQMLwEYh_c",
             authDomain: "mpstorageaplication.firebaseapp.com",
             projectId: "mpstorageaplication",
             storageBucket: "mpstorageaplication.appspot.com",
             messagingSenderId: "523833171591",
-            appId: "1:523833171591:web:4549bf16a30e1da4d9e222"
-        ),
-      );
-    } else {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
+            appId: "1:523833171591:web:4549bf16a30e1da4d9e222",
+          ),
+        );
+      } else {
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+      }
     }
+
     runApp(const MyApp());
   } catch (e, stackTrace) {
-    print('Error initializing Firebase: $e');
-    print(stackTrace);
+    debugPrint('⚠️ Error initializing Firebase: $e');
+    debugPrint('$stackTrace');
+    runApp(const MyApp()); // still launch app safely
   }
 }
 
