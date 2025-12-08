@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:ui' as ui;
-
 import 'design_features.dart';
 
 class LoanerEquipmentSummary {
@@ -271,7 +269,7 @@ class _UserEquipmentPageState extends State<UserEquipmentPage> {
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.center,
           child: Text(quantity.toString(),
-              style: userMenuTextStyle, textAlign: TextAlign.center),
+              style: userTakeoutTextStyle, textAlign: TextAlign.center),
         );
       }).toList(),
     );

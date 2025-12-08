@@ -12,115 +12,163 @@ class ToggleSwitch extends StatefulWidget {
   State<ToggleSwitch> createState() => _ToggleSwitchState();
 }
 
-class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderStateMixin {
-  late AnimationController animationController;
-  late Animation<double> animation;
-  var value = 0.0;
-  Color addColor = oliveGreenColor;
-  String addText = 'החתמה';
-  IconData addIcon = Icons.add;
+class _ToggleSwitchState extends State<ToggleSwitch> with TickerProviderStateMixin {
+  // בקר להזזה (0..1)
+  late final AnimationController _slideCtrl;
+  late final Animation<double> _slide;
 
-  Color removeColor = redColor;
-  String removeText = 'זיכוי';
-  IconData removeIcon = Icons.remove;
+  // בקר לסיבוב מלא בכל לחיצה (0..1 נכפול ב-2π)
+  late final AnimationController _spinCtrl;
+  late final Animation<double> _spin;
+
   bool isAdd = false;
+
+  // טקסט/אייקונים/צבעים (מתוך design_features.dart)
+  final Color addColor = oliveGreenColor;
+  final String addText = 'החתמה';
+  final IconData addIcon = Icons.add;
+
+  final Color removeColor = redColor;
+  final String removeText = 'זיכוי';
+  final IconData removeIcon = Icons.remove;
 
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
+
+    _slideCtrl = AnimationController(
       vsync: this,
-      lowerBound: 0.0,
-      upperBound: 1.0,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 450),
+      value: 0.0, // מתחיל בצד "החתמה"
     );
+    _slide = CurvedAnimation(parent: _slideCtrl, curve: Curves.easeInOut);
 
-    animation = CurvedAnimation(
-      parent: animationController,
-      curve: Curves.easeInOut,
+    _spinCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 450),
     );
+    _spin = CurvedAnimation(parent: _spinCtrl, curve: Curves.easeInOut);
+  }
 
-    animationController.addListener(() {
-      setState(() {
-        value = animation.value;
-      });
-    });
+  @override
+  void dispose() {
+    _slideCtrl.dispose();
+    _spinCtrl.dispose();
+    super.dispose();
+  }
+
+  void _toggle() {
+    // סיבוב מלא בכל לחיצה
+    _spinCtrl.forward(from: 0);
+
+    // הזזה לצד הבא
+    if (isAdd) {
+      _slideCtrl.reverse();
+    } else {
+      _slideCtrl.forward();
+    }
+
+    setState(() => isAdd = !isAdd);
+    widget.onChanged(isAdd);
   }
 
   @override
   Widget build(BuildContext context) {
+    // ממדים קבועים (ניתן להחליף ל-MediaQuery אם תרצה רספונסיבי)
+    const double totalWidth = 200;
+    const double totalHeight = 60;
+    const double paddingAll = 5.0;
+    const double knobSize = 40.0;
+
     return Center(
       child: GestureDetector(
-        onTap: () {
-          if (isAdd) {
-            animationController.reverse();
-          } else {
-            animationController.forward();
-          }
-          setState(() {
-            isAdd = !isAdd;
-            widget.onChanged(isAdd); // Notify the parent widget about the change
-          });
-        },
-        child: Container(
-          padding: EdgeInsets.all(5),
-          width: 200,
-          height: 60,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: Color.lerp(addColor,removeColor, value),
-            border: Border.all(color: backgroundColor),
-          ),
-          child: Stack(
-            children: <Widget>[
-              Center(
-                child: Opacity(
-                  opacity: 1.0 - value,
-                  child: Text(
-                    addText,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+        onTap: _toggle,
+        child: AnimatedBuilder(
+          animation: Listenable.merge([_slideCtrl, _spinCtrl]),
+          builder: (context, _) {
+            final double t = _slide.value;              // 0..1 להזזה/טקסט/צבע
+            final double angle = _spin.value * 2 * pi;  // 0..2π לכל לחיצה
+
+            return Container(
+              width: totalWidth,
+              height: totalHeight,
+              padding: const EdgeInsets.all(paddingAll),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Color.lerp(addColor, removeColor, t),
+                border: Border.all(color: backgroundColor, width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha:0.25),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  )
+                ],
+              ),
+              child: Stack(
+                children: <Widget>[
+                  // טקסט "החתמה" (נעלם עם ההתקדמות)
+                  Center(
+                    child: Opacity(
+                      opacity: 1.0 - t,
+                      child: const Text(
+                        'החתמה',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Center(
-                child: Opacity(
-                  opacity: value,
-                  child: Text(
-                    removeText,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  // טקסט "זיכוי" (מופיע עם ההתקדמות)
+                  Center(
+                    child: Opacity(
+                      opacity: t,
+                      child: const Text(
+                        'זיכוי',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              AnimatedPositioned(
-                duration: Duration(milliseconds: 500),
-                left: value * 145,
-                top: 5,
-                child: Transform.rotate(
-                  angle: lerpDouble(0, 2 * pi, value)!,
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: Icon(
-                      isAdd ? removeIcon : addIcon,
-                      color: isAdd ? removeColor : addColor,
+
+                  // הנוב המסתובב — שימוש ב-Align + Padding כדי לא להיחתך בקצוות
+                  Align(
+                    alignment: Alignment.lerp(
+                      Alignment.centerLeft,
+                      Alignment.centerRight,
+                      t,
+                    )!,
+                    child: Padding(
+                      // מרווח נשימה מהקצוות כדי שלא ייראה "חתוך"
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Transform.rotate(
+                        angle: angle,
+                        child: Container(
+                          height: knobSize,
+                          width: knobSize,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: Icon(
+                            isAdd ? removeIcon : addIcon,
+                            color: isAdd ? removeColor : addColor,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

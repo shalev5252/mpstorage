@@ -429,7 +429,7 @@ class _LoanPageState extends State<LoanPage> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Center(child: Text('אישור פעולה', style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black38,
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ))),
@@ -490,7 +490,7 @@ if (cont){
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Center(child: Text('הפעולה נכשלה', style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black38,
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ))),
